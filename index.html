@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="QiMeng-TensorOp: One-Line Prompt is Enough for High-Performance Tensor Operator Generation with Hardware Primitives">
+  <meta property="keywords" content="Large Language Model, High Performace Code"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>QiMeng-TensorOp: One-Line Prompt is Enough for High-Performance Tensor Operator Generation with Hardware Primitives</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/logo.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">QiMeng-TensorOp: One-Line Prompt is Enough for High-Performance Tensor Operator Generation with Hardware Primitives
+            </h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                  <a>Xuzhi Zhang</a><sup>1,3</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Shaohui Peng</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Qirui Zhou</a><sup>2,3</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Yuanbo Wen</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Qi Guo</a><sup>2,3</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Ruizhi Chen</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Xinguo Zhu</a><sup>1,3</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Weiqiang Xiong</a><sup>1,3</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Haixin Chen</a><sup>2,3</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Congying Ma</a><sup>1,4</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Ke Gao</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Chen Zhao</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Yanjun Wu</a><sup>1,3</sup>,
+              </span>
+              <span class="author-block">
+                  <a>Yunji Chen</a><sup>2,3</sup>,
+              </span>
+              <span class="author-block">
+                  and <a>Ling Li</a><sup>1,3*</sup>
+              </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Institute of Software Chinese Academy of Sciences</span><br>
+              <span class="author-block"><sup>2</sup>Institute of Computing Technology, Chinese Academy of Sciences</span><br>
+              <span class="author-block"><sup>3</sup>University of Chinese Academy of Sciences</span><br>
+              <span class="author-block"><sup>4</sup>Peking University</span>
+          </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2505.06302" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- Tool Link. -->
+                <span class="link-block">
+                  <a href="http://1.94.237.163:7860/" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-screwdriver"></i>
+                    </span>
+                    <span>Tool</span>
+                  </a>
+                </span>
+                <!-- Raw data Link-->
+                <!-- <span class="link-block">
+                  <a href="https://iprc-dip.github.io/Chip-Design-LLM-Zoo/"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-trophy"></i>
+                    </span>
+                    <span>Leaderboard</span>
+                  </a>
+                </span> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Paper abstract -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Overview</h2>
+        
+        <img src="./static/images/intro_compare_00.png" style="width: 300px; height: auto;">
+        <div class="content has-text-justified">
+          <p>
+            Computation-intensive tensor operators constitute over 90% of the computations in Large Language Models (LLMs) and Deep Neural Networks. 
+            Automatically and efficiently generating high-performance tensor operators with hardware primitives is crucial for diverse and 
+            ever-evolving hardware architectures like RISC-V, ARM, and GPUs, as manually optimized implementation takes at least months 
+            and lacks portability. LLMs excel at generating high-level language codes, but they struggle to fully comprehend hardware 
+            characteristics and produce high-performance tensor operators.
+          </p>
+          <p>
+            We introduce a tensor-operator auto-generation framework with a one-line user prompt (QiMeng-TensorOp), which enables LLMs 
+            to automatically exploit hardware characteristics to generate tensor operators with hardware primitives, and tune parameters 
+            for optimal performance across diverse hardware. Experimental results on various hardware platforms, SOTA LLMs, and typical 
+            tensor operators demonstrate that QiMeng-TensorOp effectively unleashes the computing capability of various hardware platforms, 
+            and automatically generates tensor operators of superior performance. Compared with vanilla LLMs, QiMeng-TensorOp achieves 
+            up to 1291× performance improvement. Even compared with human experts, QiMeng-TensorOp could reach 251% of OpenBLAS on 
+            RISC-V CPUs, and 124% of cuBLAS on NVIDIA GPUs. Additionally, QiMeng-TensorOp also significantly reduces development costs 
+            by 200× compared with human experts.
+</p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3"></h2>
+        <div class="content">
+          <p>
+            <thinking></thinking>
+
+          We define a framework that enables LLMs to understand hardware architectures and automatically generate high-performance tensor operators. It optimizes code using hardware primitives and leverages Monte Carlo Tree Search (MCTS) to auto-tune parameters and instruction ordering, achieving performance beyond manual optimization.
+          </p>
+        </div>
+        <img src="./static/images/overview_00.png" style="width: 60%; height: auto">
+      </div>
+    </div>
+
+  </div>
+  <!--/ Overview. -->
+</div>
+</section>
+<!-- End paper abstract -->
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- <div class="columns is-centered">
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-3"> Meta-prompt </h2>
+          <p>
+            We conduct our QiMeng-GEMM on some SOTA LLMs to evaluate the effectiveness. 
+            We evaluate the GEMM code on various platforms including CPU(RISC-V Xuantie C910) and GPU(NVIDIA RTX 4070). 
+            We test the performace of vanilla GPT-4o and claude-3.5-sonnet on many dimensions of GEMM.
+          </p>
+          <img src="./static/images/result1.png" style="display: block; margin: 0 auto; width: 60%; height: auto">
+        </div>
+      </div>
+    </div> -->
+
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-3"> Main Results </h2>
+          <p>
+            We conduct comprehensive evaluations of QiMeng-TensorOp across multiple hardware platforms, state-of-the-art LLMs, and diverse tensor operators to validate its performance and generality. Our experiments demonstrate significant improvements over baseline methods and handcrafted optimization libraries.
+          </p>
+          <p>
+            Platform Evaluation: QiMeng-TensorOp is extensively tested on a wide range of hardware architectures including RISC-V CPUs (C906, C908, C910, K1), ARM CPUs (A76, A72), and NVIDIA GPUs (RTX 4060, A100 with Tensor Cores).
+          </p>
+          <p>
+            LLM Validation: The system's performance is validated using two leading LLMs - proprietary GPT-4o and open-source DeepSeek-V3, with additional testing on Claude 3.5 Sonnet and Llama-3.1-405B for ablation studies.
+          </p>
+          <p>
+            Benchmark Coverage: Experiments include representative tensor operators (GEMM and Conv) with dimensions from popular models (Llama7b, Llama3 70b) and classical CNNs (ResNet-50, VGG-16, U-Net).
+          </p>
+          <p>
+            The following is the result of the GEMM.
+          </p>
+          <img src="./static/images/result_00.png" style="display: block; margin: 0 auto; width: 60%; height: auto">
+          <p>
+        The following is the result of the convolution operator.
+          </p>
+          <img src="./static/images/result_11.png" style="display: block; margin: 0 auto; width: 100%; height: auto">
+          <p>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+<!--BibTex citation -->
+    <div class="container content is-max-desktop">
+      <h2 class="title is-3"> BibTex </h2>
+        <pre>
+      <code class="nohighlight" style="background-color: transparent; color:black; font-family: monospace;">
+@article{
+      title={QiMeng-TensorOp: Automatically Generating High-Performance Tensor Operators with Hardware Primitives}, 
+      author={Xuzhi Zhang and Shaohui Peng and Qirui Zhou and Yuanbo Wen and Qi Guo and Ruizhi Chen and Xinguo Zhu and Weiqiang Xiong and Haixin Chen and Congying Ma and Ke Gao and Chen Zhao and Yanjun Wu and Yunji Chen and Ling Li},
+      year={2025},
+      eprint={2505.06302},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2505.06302}
+}
+</code>
+    </pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
