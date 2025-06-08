@@ -2,7 +2,6 @@ body {
   font-family: 'Noto Sans', sans-serif;
 }
 
-
 .footer .icon-link {
     font-size: 25px;
     color: #000;
@@ -17,7 +16,6 @@ body {
   font-variant: small-caps;
 }
 
-
 .teaser .hero-body {
   padding-top: 0;
   padding-bottom: 3rem;
@@ -27,13 +25,11 @@ body {
   font-family: 'Google Sans', sans-serif;
 }
 
-
 .publication-title {
 }
 
 .publication-banner {
   max-height: parent;
-
 }
 
 .publication-banner video {
@@ -133,5 +129,78 @@ body {
   font-size: smaller;
 }
 
+/* ========== 代码渲染清晰度优化 ========== */
 
+/* 代码块通用样式 */
+pre, code {
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Consolas', 'Liberation Mono', 'Menlo', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    font-weight: 400 !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
+    font-feature-settings: "liga" 0 !important;
+}
 
+/* 内联代码样式 */
+code {
+    background-color: #f5f5f5 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    border: 1px solid #e1e8ed !important;
+    color: #333 !important;
+}
+
+/* 代码块样式 */
+pre {
+    background-color: #fafafa !important;
+    border: 1px solid #e1e8ed !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+    overflow-x: auto !important;
+    margin: 1.5rem 0 !important;
+}
+
+pre code {
+    background-color: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: #2d3748 !important;
+}
+
+/* 代码窗口样式（如果有的话） */
+.code-window pre,
+.code-content pre {
+    background-color: #fafafa !important;
+    border: none !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+.code-window code,
+.code-content code {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+}
+
+/* 移动端代码优化 */
+@media (max-width: 768px) {
+    pre, code {
+        font-size: 12px !important;
+    }
+    
+    pre {
+        padding: 15px !important;
+        margin: 1rem 0 !important;
+    }
+}
+
+/* 高DPI屏幕优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    pre, code {
+        -webkit-font-smoothing: subpixel-antialiased !important;
+    }
+}
