@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/prism.min.css">
   <link rel="icon" href="./static/images/logo.png">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -41,6 +42,86 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+  <script src="./static/js/prism.min.js"></script>
+  <script src="./static/js/prism-cpp.min.js"></script>
+
+  <style>
+    .code-window {
+      background-color: #282c34;
+      border-radius: 8px;
+      border: 1px solid #444;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    
+    .code-window-header {
+      background: linear-gradient(90deg, #3e4651 0%, #2c313c 100%);
+      padding: 12px 20px;
+      border-bottom: 1px solid #444;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .code-window-title {
+      color: #abb2bf;
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+    }
+    
+    .window-controls {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .window-control {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    .control-close { background-color: #ff5f56; }
+    .control-minimize { background-color: #ffbd2e; }
+    .control-maximize { background-color: #27ca3f; }
+    
+    .code-content {
+      height: 400px;
+      overflow-y: auto;
+      overflow-x: auto;
+      padding: 0;
+      background-color: #282c34;
+    }
+    
+    .code-content pre {
+      margin: 0;
+      padding: 20px;
+      background-color: transparent;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #abb2bf;
+      font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    }
+    
+    .code-content::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    .code-content::-webkit-scrollbar-track {
+      background: #21252b;
+    }
+    
+    .code-content::-webkit-scrollbar-thumb {
+      background: #4b5263;
+      border-radius: 4px;
+    }
+    
+    .code-content::-webkit-scrollbar-thumb:hover {
+      background: #5c6370;
+    }
+  </style>
 </head>
 
 <body>
@@ -205,6 +286,7 @@
 <!-- End paper abstract -->
 
 
+
 <section class="section">
   <div class="container is-max-desktop">
     <!-- <div class="columns is-centered">
@@ -253,6 +335,269 @@
 
   </div>
 
+  <!-- Code Example Section -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-3">Generated Code Example</h2>
+          <p>
+            This is a GEMM code generated for the C910 CPU, showing the C code sketch and assembly kernel code below: 
+          </p>
+          
+          <div class="code-window" style="background-color: #ffffff !important; border: 1px solid #e0e0e0 !important;">
+            <div class="code-window-header" style="background: linear-gradient(90deg, #f5f5f5 0%, #e8e8e8 100%) !important; border-bottom: 1px solid #e0e0e0 !important;">
+              <h3 class="code-window-title" style="color: #333333 !important;">C code sketch</h3>
+              <div class="window-controls">
+                <div class="window-control control-close"></div>
+                <div class="window-control control-minimize"></div>
+                <div class="window-control control-maximize"></div>
+              </div>
+            </div>
+            <div class="code-content">
+              <pre><code class="language-cpp">
+                #include "gemm.h"
+                #include &lt;stdlib.h&gt;
+                #include &lt;stdio.h&gt;
+
+                #define GEMM_R 1024  // N dimension block size
+                #define GEMM_Q 144   // K dimension block size  
+                #define GEMM_P 48    // M dimension block size
+
+                // Helper function to determine optimal block size
+                static inline int choose_block_size(int remaining, int block_size) {
+                    return (remaining < block_size) ? remaining : block_size;
+                }
+
+                void my_cblas_sgemm(const CBLAS_LAYOUT Layout, const CBLAS_TRANSPOSE TransA,
+                                    const CBLAS_TRANSPOSE TransB, const int M, const int N,
+                                    const int K, const float alpha, const float *A,
+                                    const int lda, const float *B, const int ldb,
+                                    const float beta, float *C, const int ldc) {
+                    
+                    // Handle layout and transpose parameters
+                    // (assuming CblasRowMajor and CblasNoTrans for this implementation)
+                    
+                    // Dynamically allocate memory for packed matrices
+                    float *sa = (float *)malloc(GEMM_P * GEMM_Q * sizeof(float));
+                    float *sb = (float *)malloc(GEMM_Q * GEMM_R * sizeof(float));
+                    
+                    // Check for memory allocation failure
+                    if (sa == NULL || sb == NULL) {
+                        fprintf(stderr, "Error: Memory allocation failed for packed matrices\n");
+                        if (sa) free(sa);
+                        if (sb) free(sb);
+                        return;
+                    }
+                    
+                    // Beta scaling: Scale the output matrix C by beta
+                    BETA_OPERATION(0, M, 0, N, beta, C, ldc);
+                    
+                    // Main computation loop following NKM cycle order for cache optimization
+                    for (int js = 0; js < N; js += GEMM_R) {
+                        int min_j = choose_block_size(N - js, GEMM_R);
+                        
+                        for (int ls = 0; ls < K; ls += GEMM_Q) {
+                            int min_l = choose_block_size(K - ls, GEMM_Q);
+                            
+                            // Pack submatrix of B into buffer sb for better cache locality
+                            OCOPY_OPERATION(min_l, min_j, B, ldb, ls, js, sb);
+                            
+                            for (int is = 0; is < M; is += GEMM_P) {
+                                int min_i = choose_block_size(M - is, GEMM_P);
+                                
+                                // Pack submatrix of A into buffer sa
+                                ICOPY_OPERATION(min_l, min_i, A, lda, ls, is, sa);
+                                
+                                // Perform matrix multiplication on packed submatrices
+                                // This calls the optimized RISC-V vector kernel
+                                KERNEL_OPERATION(min_i, min_j, min_l, alpha, sa, sb, C, ldc, is, js);
+                            }
+                        }
+                    }
+                    
+                    // Clean up dynamically allocated memory
+                    free(sa);
+                    free(sb);
+                }
+              </code></pre>
+            </div>
+          </div>
+
+          <div class="code-window" style="background-color: #ffffff !important; border: 1px solid #e0e0e0 !important;">
+            <div class="code-window-header" style="background: linear-gradient(90deg, #f5f5f5 0%, #e8e8e8 100%) !important; border-bottom: 1px solid #e0e0e0 !important;">
+              <h3 class="code-window-title" style="color: #333333 !important;">Assembly kernel code</h3>
+              <div class="window-controls">
+                <div class="window-control control-close"></div>
+                <div class="window-control control-minimize"></div>
+                <div class="window-control control-maximize"></div>
+              </div>
+            </div>
+            <div class="code-content">
+              <pre><code class="language-cpp">
+                #include &lt;riscv_vector.h&gt;
+                #define L2_16_4 \
+                ...
+
+                #define L2_8_4 \
+                &quot;.L8x4_Init: \n\t&quot;\
+                &quot;li         t0, 4 \n\t&quot;\
+                &quot;vsetvli    t0, t0, e32, m1 \n\t&quot;\
+                &quot;fmv.w.x    ft11, zero \n\t&quot;\
+                &quot;vfmv.v.f   v12, ft11 \n\t&quot;\
+                &quot;vfmv.v.f   v13, ft11 \n\t&quot;\
+                &quot;vfmv.v.f   v14, ft11 \n\t&quot;\
+                &quot;vfmv.v.f   v15, ft11 \n\t&quot;\
+                &quot;vfmv.v.f   v16, ft11 \n\t&quot;\
+                &quot;vfmv.v.f   v17, ft11 \n\t&quot;\
+                &quot;vfmv.v.f   v18, ft11 \n\t&quot;\
+                &quot;vfmv.v.f   v19, ft11 \n\t&quot;\
+                &quot;vlw.v      v0,   (%[PA]) \n\t&quot;\
+                &quot;flw        ft0,   0(%[PB]) \n\t&quot;\
+                &quot;addi       %[PA], %[PA], 16 \n\t&quot;\
+                &quot;vfmv.v.f   v4,   ft0 \n\t&quot;\
+                &quot;flw        ft2,   8(%[PB]) \n\t&quot;\
+                &quot;vlw.v      v1,   (%[PA]) \n\t&quot;\
+                &quot;flw        ft1,   4(%[PB]) \n\t&quot;\
+                &quot;addi       %[PA], %[PA], 16 \n\t&quot;\
+                &quot;vfmv.v.f   v5,   ft1 \n\t&quot;\
+                &quot;vfmv.v.f   v6,   ft2 \n\t&quot;\
+                &quot;flw        ft3,   12(%[PB]) \n\t&quot;\
+                &quot;vfmv.v.f   v7,   ft3 \n\t&quot;\
+                &quot;addi       %[PB], %[PB], 16 \n\t&quot;\
+                &quot;    mv     t0,   %[BK] \n\t&quot;\
+                &quot;    srli   t1,   t0, 1 \n\t&quot;\
+                &quot;    blez   t0,   .L8x4_End \n\t&quot;\
+                &quot;.L8x4_Main: \n\t&quot;\
+                &quot;    blez   t1,   .L8x4_Maintail \n\t&quot;\
+                &quot;.L8x4_Mainloop: \n\t&quot;\
+                &quot;vfmacc.vv  v12,  v0,    v4 \n\t&quot;\
+                &quot;vfmacc.vv  v13,  v0,    v5 \n\t&quot;\
+                &quot;vfmacc.vv  v14,  v0,    v6 \n\t&quot;\
+                &quot;vfmacc.vv  v15,  v0,    v7 \n\t&quot;\
+                &quot;vfmacc.vv  v16,  v1,    v4 \n\t&quot;\
+                &quot;vfmacc.vv  v17,  v1,    v5 \n\t&quot;\
+                &quot;vfmacc.vv  v18,  v1,    v6 \n\t&quot;\
+                &quot;vfmacc.vv  v19,  v1,    v7 \n\t&quot;\
+                &quot;vlw.v      v2,   (%[PA]) \n\t&quot;\
+                &quot;flw        ft4,   0(%[PB]) \n\t&quot;\
+                &quot;addi       %[PA], %[PA], 16 \n\t&quot;\
+                &quot;vfmv.v.f   v8,   ft4 \n\t&quot;\
+                &quot;vlw.v      v3,   (%[PA]) \n\t&quot;\
+                &quot;flw        ft5,   4(%[PB]) \n\t&quot;\
+                &quot;addi       %[PA], %[PA], 16 \n\t&quot;\
+                ...
+
+                int gemm_kernel(long bm,long bn,long bk,float alpha,float* ba,float* bb,float* C,long ldc)
+                {
+                  long i,j,k;
+                  float *C0,*C1,*C2,*C3;
+                  float *ptrba,*ptrbb;
+
+                  for (j=0; j&lt;bn/4; j+=1){
+                    C0 = C;
+                    C1 = C0+ldc;
+                    C2 = C1+ldc;
+                    C3 = C2+ldc;
+
+                    ptrba = ba;
+                      for(i=0; i&lt;bm/16; i+=1) {
+                        ptrbb = bb;
+                        asm volatile(L2_16_4);
+                      }
+                      if(bm&amp;8) {
+                        ptrbb = bb;
+                        asm volatile(L2_8_4);
+                      }
+                      if(bm&amp;4) {
+                        ptrbb = bb;
+                        asm volatile(L2_4_4);
+                      }
+                      if(bm&amp;2) {
+                        ptrbb = bb;
+                        asm volatile(L2_2_4);
+                      }
+                      if(bm&amp;1) {
+                        ptrbb = bb;
+                        asm volatile(L2_1_4);
+                      }
+                      k = bk*4;
+                    bb = bb+k;
+                    i = ldc*4;
+                    C = C+i;
+                  }
+                  if(bn&amp;2) {
+                      C0 = C;
+                    C1 = C0+ldc;
+
+                    ptrba = ba;
+                      for(i=0; i&lt;bm/16; i+=1) {
+                        ptrbb = bb;
+                        asm volatile(L2_16_2);
+                      }
+                      if(bm&amp;8) {
+                        ptrbb = bb;
+                        asm volatile(L2_8_2);
+                      }
+                      if(bm&amp;4) {
+                        ptrbb = bb;
+                        asm volatile(L2_4_2);
+                      }
+                      if(bm&amp;2) {
+                        ptrbb = bb;
+                        asm volatile(L2_2_2);
+                      }
+                      if(bm&amp;1) {
+                        ptrbb = bb;
+                        asm volatile(L2_1_2);
+                      }
+                      k = bk*2;
+                    bb = bb+k;
+                    i = ldc*2;
+                    C = C+i;
+                  }
+                  if(bn&amp;1) {
+                      C0 = C;
+                    ptrba = ba;
+                      for(i=0; i&lt;bm/16; i+=1) {
+                        ptrbb = bb;
+                        asm volatile(L2_16_1);
+                      }
+                      if(bm&amp;8) {
+                        ptrbb = bb;
+                        asm volatile(L2_8_1);
+                      }
+                      if(bm&amp;4) {
+                        ptrbb = bb;
+                        asm volatile(L2_4_1);
+                      }
+                      if(bm&amp;2) {
+                        ptrbb = bb;
+                        asm volatile(L2_2_1);
+                      }
+                      if(bm&amp;1) {
+                        ptrbb = bb;
+                        asm volatile(L2_1_1);
+                      }
+                      k = bk;
+                    bb = bb+k;
+                    C = C+ldc;
+                  }
+                  return 0 ;
+                }
+                </code></pre>
+
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Code Example Section -->
 
 <!--BibTex citation -->
     <div class="container content is-max-desktop">
@@ -272,6 +617,9 @@
     </pre>
     </div>
 </section>
+
+
+
 <!--End BibTex citation -->
 
 
@@ -282,7 +630,7 @@
         <div class="content">
 
           <p>
-            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
             You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
             Commons Attribution-ShareAlike 4.0 International License</a>.
           </p>
